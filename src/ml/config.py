@@ -4,12 +4,7 @@ from typing import List
 TRAIN_DATA_PATH: str = "src/data/train.parquet"
 
 # Все столбцы, используемые в данных
-ALL_COLUMNS: List[str] = [
-    "Вопрос пользователя",
-    "Классификатор 1 уровня",
-    "Классификатор 2 уровня",
-    "target"
-]
+ALL_COLUMNS: List[str] = ["Вопрос пользователя", "Классификатор 1 уровня", "Классификатор 2 уровня", "target"]
 
 # Название модели классификатора
 CLASSIFIER_MODEL_NAME: str = "intfloat/multilingual-e5-large-instruct"

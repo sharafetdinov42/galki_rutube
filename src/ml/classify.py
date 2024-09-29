@@ -1,14 +1,15 @@
 import asyncio
+import json
 from collections import Counter
 
 import numpy as np
 import pandas as pd
+import requests
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-import requests
 
 from src.ml.config import CLASSIFIER_MODEL_NAME, EMBEDDING_COLUMN, HOST, PORT, TARGET_COLUMN, TOP_N, TRAIN_DATA_PATH
 
@@ -52,16 +53,19 @@ async def predict_class(request: Request) -> Response:
     """
     query = request.question
 
-    url = "http://83.143.66.65:27370/predict"
+    text_url = "http://5.182.86.183:8001/predict"  # Укажите URL вашего API
+    text_headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    text_data = {"history": [{"role": "user", "content": query}]}
+    text_response = requests.post(text_url, headers=text_headers, data=json.dumps(text_data))
 
-    # Запрос к API
-    payload = {"question": query}
-    headers = {"Content-Type": "application/json"}
-  
-    text = requests.post(url, json=payload, headers=headers)
     predicted_class = find_similar_class(query, train, model, TOP_N)
-    
-    response = Response(text=text, class_1=predicted_class.split("_")[0], class_2=predicted_class.split("_")[1])
+
+    response = Response(
+        text=text_response, class_1=predicted_class.split("_")[0], class_2=predicted_class.split("_")[1]
+    )
 
     return response
 
