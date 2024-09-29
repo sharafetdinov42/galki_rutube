@@ -63,3 +63,28 @@ COPY src/ ./src
 
 # Команда для запуска приложения
 CMD ["poetry", "run", "uvicorn", "src.ml.classify:app", "--host", "0.0.0.0", "--port", "27370"]
+```
+
+
+# Проверка API
+
+Для тестирования API используйте следующий пример кода на Python:
+
+```python
+import requests
+
+# URL вашего API
+url = "http://83.143.66.65:27370/predict" # API
+
+# Запрос к API
+payload = {"question": "Что такое метка 18+?"} # Впишите сюда свой запрос
+headers = {"Content-Type": "application/json"}
+
+try:
+    response = requests.post(url, json=payload, headers=headers)
+    if response.status_code == 200:
+        print("Ответ:", response.json())
+    else:
+        print("Ошибка:", response.status_code, response.text)
+except requests.exceptions.RequestException as e:
+    print("Произошла ошибка при подключении к API:", e)
