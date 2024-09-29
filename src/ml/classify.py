@@ -67,7 +67,7 @@ async def predict_class(request: Request) -> Response:
     text_response = requests.post(text_url, json=payload, headers=headers)
 
     # Извлекаем текст из ответа
-    response_text = text_response.json().get("text", "Нет ответа")  # Предполагаем, что ответ в формате JSON
+    response_text = text_response.json()
 
     predicted_class = find_similar_class(query, train, model, TOP_N)
 
