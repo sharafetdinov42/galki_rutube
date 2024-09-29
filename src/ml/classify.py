@@ -53,13 +53,18 @@ async def predict_class(request: Request) -> Response:
     """
     query = request.question
 
-    text_url = "http://5.182.86.183:8001/predict"  # Укажите URL вашего API
-    text_headers = {
-        "accept": "application/json",
-        "Content-Type": "application/json",
+    text_url = "http://5.182.86.183:27361/api/v1/get_answer"  # Укажите URL вашего API
+    payload = {
+    "history": [
+        {
+        "role": "user",
+        "content": "Отвечай кратко и по делу, но учитывая всю специфику вопроса" + query
+        }
+    ]
     }
-    text_data = {"history": [{"role": "user", "content": query}]}
-    text_response = requests.post(text_url, headers=text_headers, data=json.dumps(text_data))
+    headers = {"Content-Type": "application/json"}
+
+    text_response = requests.post(text_url, json=payload, headers=headers)
 
     predicted_class = find_similar_class(query, train, model, TOP_N)
 

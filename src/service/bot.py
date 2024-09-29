@@ -32,16 +32,23 @@ def get_answer_from_api(user_message: str) -> str:
     :param user_message: Сообщение пользователя.
     :return: Ответ от API или сообщение об ошибке.
     """
-    url = "http://5.182.86.183:8001/predict"  # Укажите URL вашего API
+    text_url = "http://5.182.86.183:27361/api/v1/get_answer"  # Укажите URL вашего API
 
     headers = {
         "accept": "application/json",
         "Content-Type": "application/json",
     }
 
-    data = {"history": [{"role": "user", "content": user_message}]}
+    payload = {
+    "history": [
+        {
+        "role": "user",
+        "content": "Отвечай кратко и по делу, но учитывая всю специфику вопроса" + user_message
+        }
+    ]
+    }
 
-    response = requests.post(url, headers=headers, data=json.dumps(data))
+    response = requests.post(text_url, headers=headers, data=json.dumps(payload))
 
     if response.status_code == 200:
         response_data = response.json()
