@@ -66,13 +66,16 @@ async def predict_class(request: Request) -> Response:
 
     text_response = requests.post(text_url, json=payload, headers=headers)
 
+    # Извлекаем текст из ответа
+    response_text = text_response.json().get("text", "Нет ответа")  # Предполагаем, что ответ в формате JSON
+
     predicted_class = find_similar_class(query, train, model, TOP_N)
 
-    response = Response(
-        text=text_response, class_1=predicted_class.split("_")[0], class_2=predicted_class.split("_")[1]
+    return Response(
+        text=response_text, 
+        class_1=predicted_class.split("_")[0], 
+        class_2=predicted_class.split("_")[1]
     )
-
-    return response
 
 
 def find_similar_class(query: str, train: pd.DataFrame, model: SentenceTransformer, top_n: int) -> str:
