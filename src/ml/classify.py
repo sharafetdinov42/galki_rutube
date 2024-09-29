@@ -27,7 +27,7 @@ class Request(BaseModel):
 class Response(BaseModel):
     """Модель для ответа с предсказанными классами."""
 
-    text: str
+    answer: str
     class_1: str
     class_2: str
 
@@ -72,7 +72,7 @@ async def predict_class(request: Request) -> Response:
     predicted_class = find_similar_class(query, train, model, TOP_N)
 
     return Response(
-        text=response_text, 
+        answer=response_text, 
         class_1=predicted_class.split("_")[0], 
         class_2=predicted_class.split("_")[1]
     )
