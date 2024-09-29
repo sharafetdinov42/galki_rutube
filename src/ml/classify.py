@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+import requests
 
 from src.ml.config import CLASSIFIER_MODEL_NAME, EMBEDDING_COLUMN, HOST, PORT, TARGET_COLUMN, TOP_N, TRAIN_DATA_PATH
 
@@ -25,6 +26,7 @@ class Request(BaseModel):
 class Response(BaseModel):
     """Модель для ответа с предсказанными классами."""
 
+    text: str
     class_1: str
     class_2: str
 
@@ -49,9 +51,17 @@ async def predict_class(request: Request) -> Response:
         Response: Ответ с предсказанными классами.
     """
     query = request.question
-    predicted_class = find_similar_class(query, train, model, TOP_N)
 
-    response = Response(class_1=predicted_class.split("_")[0], class_2=predicted_class.split("_")[1])
+    url = "http://83.143.66.65:27370/predict"
+
+    # Запрос к API
+    payload = {"question": query}
+    headers = {"Content-Type": "application/json"}
+  
+    text = requests.post(url, json=payload, headers=headers)
+    predicted_class = find_similar_class(query, train, model, TOP_N)
+    
+    response = Response(text=text, class_1=predicted_class.split("_")[0], class_2=predicted_class.split("_")[1])
 
     return response
 

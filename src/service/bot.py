@@ -28,16 +28,7 @@ def get_answer_from_api(user_message: str) -> str:
     :param user_message: Сообщение пользователя.
     :return: Ответ от API или сообщение об ошибке.
     """
-    url = ""  # Укажите URL вашего API
-
-    headers = {
-        "accept": "application/json",
-        "Content-Type": "application/json",
-    }
-
-    data = {"history": [{"role": "user", "content": user_message}]}
-
-    response = requests.post(url, headers=headers, data=json.dumps(data))
+s
 
     if response.status_code == 200:
         response_data = response.json()
