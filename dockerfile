@@ -19,4 +19,4 @@ RUN poetry install --no-root
 COPY src/ ./src
 
 # Команда для запуска приложения
-CMD ["poetry", "run", "uvicorn", "src.ml.classify:app", "--host", "0.0.0.0", "--port", "38731"]
+CMD ["poetry", "run", "uvicorn", "src.ml.classify:app", "--host", "0.0.0.0", "--port", "27370"]

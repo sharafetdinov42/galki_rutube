@@ -20,6 +20,7 @@ nltk = "^3.9.1"
 pymorphy2 = "^0.9.1"
 fastapi = "^0.115.0"
 uvicorn = "^0.31.0"
+telebot = "^0.0.5"
 
 
 [tool.poetry.group.dev.dependencies]
